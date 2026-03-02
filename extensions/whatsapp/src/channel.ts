@@ -28,6 +28,7 @@ import {
   resolveWhatsAppMentionStripPatterns,
   whatsappOnboardingAdapter,
   WhatsAppConfigSchema,
+  type ChannelHook,
   type ChannelMessageActionName,
   type ChannelPlugin,
   type ResolvedWhatsAppAccount,
