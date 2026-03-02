@@ -2,7 +2,6 @@ import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
 import { emptyPluginConfigSchema } from "openclaw/plugin-sdk";
 import { whatsappPlugin } from "./src/channel.js";
 import { setWhatsAppRuntime } from "./src/runtime.js";
-import { registerWhatsAppSubagentHooks } from "./src/subagent-hooks.js";
 
 const plugin = {
   id: "whatsapp",
@@ -12,7 +11,6 @@ const plugin = {
   register(api: OpenClawPluginApi) {
     setWhatsAppRuntime(api.runtime);
     api.registerChannel({ plugin: whatsappPlugin });
-    registerWhatsAppSubagentHooks(api);
   },
 };
 
