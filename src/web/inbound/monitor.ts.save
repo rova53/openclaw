@@ -191,10 +191,10 @@ export async function monitorWebInbox(options: {
         : from;
 
       // START - AJOUT DU FILTRE PAR NUMÉRO DE TÉLÉPHONE
-      const senderNormalized = senderE164?.replace(/[^0-9]/g, ""); // Normalise le numéro pour comparaison
+      const senderNormalized = senderE164?.replace(/[^0-9]/g, ''); // Normalise le numéro pour comparaison
       if (senderNormalized !== MY_PHONE_NUMBER_E164) {
-        logVerbose(`Ignoring message from ${senderE164} (not ${MY_PHONE_NUMBER_E164})`);
-        continue; // Ignore le message si ce n'est pas votre numéro
+          logVerbose(`Ignoring message from ${senderE164} (not ${MY_PHONE_NUMBER_E164})`);
+          continue; // Ignore le message si ce n'est pas votre numéro
       }
       // END - AJOUT DU FILTRE PAR NUMÉRO DE TÉLÉPHONE
 
