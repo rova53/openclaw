@@ -3,12 +3,19 @@ import type { AnyAgentTool, OpenClawPluginApi, RuntimeLogger } from "openclaw/pl
 import type { RedisStreamsConfig } from "./config.js";
 import { getRedisClient } from "./redisClient.js";
 
-const RedisPublishParamsSchema = Type.Object({
-  streamName: Type.String({ description: "Name of the Redis stream" }),
-  message: Type.Record(Type.String(), Type.String(), {
-    description: "Key-value pairs to publish (string keys and values)",
-  }),
-});
+const RedisPublishParamsSchema = Type.Object(
+  {
+    streamName: Type.String({ description: "Name of the Redis stream" }),
+    message: Type.Object(
+      {},
+      {
+        additionalProperties: Type.String(),
+        description: "Key-value pairs to publish (string keys and values)",
+      },
+    ),
+  },
+  { additionalProperties: false },
+);
 
 const RedisSubscribeParamsSchema = Type.Object({
   streamName: Type.String({ description: "Name of the Redis stream" }),
