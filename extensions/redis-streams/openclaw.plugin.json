@@ -1,0 +1,8 @@
+{
+  "id": "redis-streams",
+  "name": "Redis Streams",
+  "description": "OpenClaw plugin for Redis Streams integration.",
+  "configSchema": "./src/config.js",
+  "repository": "https://github.com/rova53/openclaw",
+  "author": "ARIA (Lead Core Developer)"
+}

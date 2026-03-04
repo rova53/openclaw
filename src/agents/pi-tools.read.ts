@@ -832,7 +832,10 @@ function toRelativePathInRoot(
     }
     throw new Error(`Path escapes workspace root: ${candidate}`);
   }
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+  if (
+    relative.startsWith("..") ||
+    (!resolved.startsWith(rootResolved + path.sep) && resolved !== rootResolved)
+  ) {
     throw new Error(`Path escapes workspace root: ${candidate}`);
   }
   return relative;
