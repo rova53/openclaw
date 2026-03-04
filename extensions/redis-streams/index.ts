@@ -10,7 +10,7 @@ const plugin = {
   configSchema: RedisStreamsConfigSchema,
   register(api: OpenClawPluginApi) {
     const logger = api.runtime.logging.getChildLogger({ module: "redis-streams" });
-    const config = api.getPluginConfig("redis-streams");
+    const config = RedisStreamsConfigSchema.parse(api.pluginConfig);
 
     api.registerTool(createRedisPublishTool(api, config, logger));
     api.registerTool(createRedisSubscribeTool(api, config, logger));
