@@ -4,6 +4,7 @@
   "description": "OpenClaw plugin for Redis Streams integration.",
   "type": "module",
   "dependencies": {
+    "@sinclair/typebox": "0.34.48",
     "ioredis": "^5.10.0"
   },
   "openclaw": {

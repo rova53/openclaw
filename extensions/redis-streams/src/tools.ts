@@ -1,19 +1,33 @@
+import { Type } from "@sinclair/typebox";
 import type { AnyAgentTool, OpenClawPluginApi, RuntimeLogger } from "openclaw/plugin-sdk";
-import { z } from "zod";
 import type { RedisStreamsConfig } from "./config.js";
 import { getRedisClient } from "./redisClient.js";
 
-const RedisPublishParamsSchema = z.object({
-  streamName: z.string().min(1),
-  message: z.record(z.string(), z.string()),
+const RedisPublishParamsSchema = Type.Object({
+  streamName: Type.String({ description: "Name of the Redis stream" }),
+  message: Type.Record(Type.String(), Type.String(), {
+    description: "Key-value pairs to publish (string keys and values)",
+  }),
 });
 
-const RedisSubscribeParamsSchema = z.object({
-  streamName: z.string().min(1),
-  consumerGroup: z.string().min(1),
-  consumerName: z.string().min(1),
-  blockMs: z.number().int().min(0).default(5000),
-  count: z.number().int().min(1).default(10),
+const RedisSubscribeParamsSchema = Type.Object({
+  streamName: Type.String({ description: "Name of the Redis stream" }),
+  consumerGroup: Type.String({ description: "Consumer group name" }),
+  consumerName: Type.String({ description: "Consumer name within the group" }),
+  blockMs: Type.Optional(
+    Type.Number({
+      description: "Block timeout in milliseconds (default 5000)",
+      minimum: 0,
+      default: 5000,
+    }),
+  ),
+  count: Type.Optional(
+    Type.Number({
+      description: "Max messages to read per call (default 10)",
+      minimum: 1,
+      default: 10,
+    }),
+  ),
 });
 
 export function createRedisPublishTool(
@@ -62,6 +76,8 @@ export function createRedisSubscribeTool(
     parameters: RedisSubscribeParamsSchema,
     execute: async (toolCallId, params) => {
       const redis = getRedisClient(config, logger);
+      const blockMs = params.blockMs ?? 5000;
+      const count = params.count ?? 10;
       try {
         await redis.xgroup("CREATE", params.streamName, params.consumerGroup, "$", "MKSTREAM");
       } catch (error: unknown) {
@@ -86,9 +102,9 @@ export function createRedisSubscribeTool(
           params.consumerGroup,
           params.consumerName,
           "BLOCK",
-          params.blockMs,
+          blockMs,
           "COUNT",
-          params.count,
+          count,
           "STREAMS",
           params.streamName,
           ">",
