@@ -1,0 +1,12 @@
+{
+  "name": "@openclaw/redis-streams",
+  "version": "2026.2.26",
+  "description": "OpenClaw plugin for Redis Streams integration.",
+  "type": "module",
+  "dependencies": {
+    "ioredis": "^5.10.0"
+  },
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  }
+}

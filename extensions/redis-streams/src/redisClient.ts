@@ -1,14 +1,12 @@
 import Redis from "ioredis";
-import { getChildLogger } from "../../logging/logger.js";
-import { RedisStreamsConfig } from "./config.js";
-
-const pluginLogger = getChildLogger({ module: "redis-streams" });
+import type { RuntimeLogger } from "openclaw/plugin-sdk";
+import type { RedisStreamsConfig } from "./config.js";
 
 let redisClient: Redis | null = null;
 
-export function getRedisClient(config: RedisStreamsConfig): Redis {
+export function getRedisClient(config: RedisStreamsConfig, logger: RuntimeLogger): Redis {
   if (!redisClient) {
-    pluginLogger.info("Initializing Redis client...");
+    logger.info("Initializing Redis client...");
     redisClient = new Redis({
       host: config.host,
       port: config.port,
@@ -16,28 +14,28 @@ export function getRedisClient(config: RedisStreamsConfig): Redis {
     });
 
     redisClient.on("error", (err) => {
-      pluginLogger.error({ err }, "Redis Client Error");
+      logger.error("Redis Client Error", { err });
     });
 
     redisClient.on("connect", () => {
-      pluginLogger.info("Redis Client Connected");
+      logger.info("Redis Client Connected");
     });
 
     redisClient.on("ready", () => {
-      pluginLogger.info("Redis Client Ready");
+      logger.info("Redis Client Ready");
     });
 
     redisClient.on("end", () => {
-      pluginLogger.info("Redis Client Disconnected");
-      redisClient = null; // Clear client on disconnect
+      logger.info("Redis Client Disconnected");
+      redisClient = null;
     });
   }
   return redisClient;
 }
 
-export async function closeRedisClient(): Promise<void> {
+export async function closeRedisClient(logger: RuntimeLogger): Promise<void> {
   if (redisClient) {
-    pluginLogger.info("Closing Redis client...");
+    logger.info("Closing Redis client...");
     await redisClient.quit();
     redisClient = null;
   }

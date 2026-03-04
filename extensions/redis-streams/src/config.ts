@@ -1,4 +1,4 @@
-import { buildChannelConfigSchema, buildPluginConfigSchema } from "openclaw/plugin-sdk";
+import { buildPluginConfigSchema } from "openclaw/plugin-sdk";
 import { z } from "zod";
 
 export const RedisStreamsConfigSchema = buildPluginConfigSchema({
