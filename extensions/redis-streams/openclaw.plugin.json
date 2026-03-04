@@ -2,7 +2,25 @@
   "id": "redis-streams",
   "name": "Redis Streams",
   "description": "OpenClaw plugin for Redis Streams integration.",
-  "configSchema": "./src/config.js",
   "repository": "https://github.com/rova53/openclaw",
-  "author": "ARIA (Lead Core Developer)"
+  "author": "ARIA (Lead Core Developer)",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "host": {
+        "type": "string",
+        "default": "127.0.0.1"
+      },
+      "port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535,
+        "default": 6379
+      },
+      "password": {
+        "type": "string"
+      }
+    }
+  }
 }
